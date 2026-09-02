@@ -211,19 +211,19 @@ export default function TwoThousandFortyEight() {
 
   const getTileColor = (val: number) => {
     const colors: Record<number, string> = {
-      2: "bg-slate-200 text-slate-800",
-      4: "bg-slate-300 text-slate-800",
-      8: "bg-orange-200 text-orange-800",
-      16: "bg-orange-300 text-orange-900",
-      32: "bg-orange-400 text-white",
-      64: "bg-orange-500 text-white",
-      128: "bg-yellow-200 text-yellow-800",
-      256: "bg-yellow-300 text-yellow-800",
-      512: "bg-yellow-400 text-yellow-900",
-      1024: "bg-yellow-500 text-white",
-      2048: "bg-yellow-600 text-white",
+      2: "bg-slate-100 text-slate-800",
+      4: "bg-slate-200 text-slate-800",
+      8: "bg-orange-200 text-orange-900",
+      16: "bg-orange-400 text-white",
+      32: "bg-rose-400 text-white",
+      64: "bg-rose-500 text-white",
+      128: "bg-yellow-300 text-yellow-900 shadow-[0_0_15px_rgba(253,224,71,0.5)]",
+      256: "bg-yellow-400 text-yellow-900 shadow-[0_0_20px_rgba(250,204,21,0.6)]",
+      512: "bg-yellow-500 text-white shadow-[0_0_25px_rgba(234,179,8,0.7)]",
+      1024: "bg-amber-500 text-white shadow-[0_0_30px_rgba(245,158,11,0.8)]",
+      2048: "bg-amber-600 text-white shadow-[0_0_40px_rgba(217,119,6,0.9)]",
     };
-    return colors[val] || "bg-rose-500 text-white";
+    return colors[val] || "bg-violet-600 text-white shadow-[0_0_50px_rgba(124,58,237,1)]";
   };
 
   return (
