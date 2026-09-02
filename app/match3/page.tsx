@@ -210,23 +210,26 @@ export default function Match3() {
                     <motion.div
                       key={candy.id}
                       layout
-                      initial={{ scale: 0, opacity: 0 }}
+                      initial={{ scale: 0, opacity: 0, filter: "blur(4px)" }}
                       animate={{ 
                         scale: selected?.r === candy.r && selected?.c === candy.c ? 1.15 : 1,
                         opacity: 1,
+                        filter: "blur(0px)",
                         top: `${(candy.r * 100) / GRID_SIZE}%`,
                         left: `${(candy.c * 100) / GRID_SIZE}%`,
                       }}
-                      exit={{ scale: 0, opacity: 0 }}
+                      exit={{ scale: 0.5, opacity: 0, filter: "blur(4px)" }}
                       transition={{ 
                         type: "spring", 
                         stiffness: 400, 
-                        damping: 30,
+                        damping: 25,
                         mass: 0.8
                       }}
+                      whileHover={{ scale: selected?.r === candy.r && selected?.c === candy.c ? 1.15 : 1.05 }}
+                      whileTap={{ scale: 0.9 }}
                       onClick={() => handleCandyClick(candy.r, candy.c)}
-                      className={`absolute flex items-center justify-center cursor-pointer rounded-md
-                        ${selected?.r === candy.r && selected?.c === candy.c ? 'ring-2 ring-primary bg-primary/10 z-10' : 'hover:bg-black/5'}
+                      className={`absolute flex items-center justify-center cursor-pointer rounded-xl shadow-sm transition-shadow
+                        ${selected?.r === candy.r && selected?.c === candy.c ? 'ring-4 ring-primary bg-primary/10 z-10 shadow-md' : 'hover:bg-black/5 hover:shadow-md'}
                       `}
                       style={{
                         width: `${100 / GRID_SIZE}%`,
@@ -234,7 +237,7 @@ export default function Match3() {
                         fontSize: "clamp(1.5rem, 6vw, 2.5rem)",
                       }}
                     >
-                      {candy.type}
+                      <span className="drop-shadow-sm">{candy.type}</span>
                     </motion.div>
                   ))}
                 </AnimatePresence>

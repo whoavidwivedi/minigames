@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowLeft } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 const GRAVITY = 0.6;
 const JUMP = -8;
@@ -228,22 +229,40 @@ export default function Flappy() {
                 height={CANVAS_HEIGHT}
                 className="w-full h-full object-cover"
               />
+              <AnimatePresence>
+                {!isPlaying && !isGameOver && (
+                  <motion.div 
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="absolute inset-0 bg-background/30 backdrop-blur-[2px] flex items-center justify-center pointer-events-none z-10"
+                  >
+                    <motion.p 
+                      animate={{ scale: [1, 1.05, 1] }}
+                      transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
+                      className="text-2xl font-bold text-foreground drop-shadow-md"
+                    >
+                      Tap to Start
+                    </motion.p>
+                  </motion.div>
+                )}
 
-              {!isPlaying && !isGameOver && (
-                <div className="absolute inset-0 bg-background/50 flex items-center justify-center pointer-events-none">
-                  <p className="text-2xl font-bold text-foreground animate-pulse">Tap to Start</p>
-                </div>
-              )}
-
-              {isGameOver && (
-                <div className="absolute inset-0 bg-background/90 backdrop-blur-sm flex flex-col items-center justify-center z-20 p-6 text-center pointer-events-none">
-                  <h2 className="text-4xl font-black mb-2 text-foreground">Game Over!</h2>
-                  <p className="text-2xl font-semibold mb-8">Score: {score}</p>
-                  <Button size="lg" className="w-full max-w-[200px] text-lg pointer-events-auto" onClick={(e) => { e.stopPropagation(); resetGame(); }}>
-                    Play Again
-                  </Button>
-                </div>
-              )}
+                {isGameOver && (
+                  <motion.div 
+                    initial={{ opacity: 0, filter: "blur(10px)", scale: 1.1 }}
+                    animate={{ opacity: 1, filter: "blur(0px)", scale: 1 }}
+                    exit={{ opacity: 0, filter: "blur(10px)", scale: 0.9 }}
+                    transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                    className="absolute inset-0 bg-background/50 backdrop-blur-md flex flex-col items-center justify-center z-20 p-6 text-center pointer-events-none"
+                  >
+                    <h2 className="text-4xl font-black mb-2 text-foreground drop-shadow-lg">Game Over!</h2>
+                    <p className="text-2xl font-semibold mb-8 drop-shadow-md">Score: {score}</p>
+                    <Button size="lg" className="w-full max-w-[200px] text-lg pointer-events-auto shadow-xl" onClick={(e) => { e.stopPropagation(); resetGame(); }}>
+                      Play Again
+                    </Button>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
             <p className="text-muted-foreground text-sm mt-4">Tap the game area or press Spacebar to jump</p>
           </CardContent>

@@ -261,15 +261,15 @@ export default function TwoThousandFortyEight() {
                     key={tile.id}
                     layoutId={tile.id}
                     layout
-                    initial={tile.isNew ? { scale: 0, opacity: 0 } : false}
-                    animate={{ scale: tile.isMerged ? [1, 1.15, 1] : 1, opacity: 1 }}
-                    exit={{ scale: 0, opacity: 0 }}
-                    transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                    initial={tile.isNew ? { scale: 0.5, opacity: 0, filter: "blur(8px)" } : false}
+                    animate={{ scale: tile.isMerged ? [1, 1.15, 1] : 1, opacity: 1, filter: "blur(0px)" }}
+                    exit={{ scale: 0.5, opacity: 0, filter: "blur(8px)" }}
+                    transition={{ type: "spring", stiffness: 450, damping: 30, mass: 0.8 }}
                     style={{
                       gridRow: tile.r + 1,
                       gridColumn: tile.c + 1,
                     }}
-                    className={`flex items-center justify-center font-bold text-xl sm:text-4xl shadow-sm z-10 ${getTileColor(tile.value)}`}
+                    className={`flex items-center justify-center font-bold text-xl sm:text-4xl shadow-sm z-10 rounded-sm ${getTileColor(tile.value)}`}
                   >
                     {tile.value}
                   </motion.div>
@@ -280,10 +280,11 @@ export default function TwoThousandFortyEight() {
             <AnimatePresence>
               {gameOver && (
                 <motion.div 
-                  initial={{ opacity: 0 }} 
-                  animate={{ opacity: 1 }} 
-                  exit={{ opacity: 0 }} 
-                  className="absolute inset-0 bg-background/80 flex flex-col items-center justify-center rounded-lg z-20 m-1 sm:m-3"
+                  initial={{ opacity: 0, filter: "blur(10px)" }} 
+                  animate={{ opacity: 1, filter: "blur(0px)" }} 
+                  exit={{ opacity: 0, filter: "blur(10px)" }} 
+                  transition={{ duration: 0.4, ease: "easeOut" }}
+                  className="absolute inset-0 bg-background/50 backdrop-blur-md flex flex-col items-center justify-center rounded-sm z-20"
                 >
                   <h2 className="text-4xl font-bold mb-2">Game Over!</h2>
                   <p className="text-xl mb-6 text-muted-foreground">Final Score: {score}</p>

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
+import { motion, AnimatePresence } from "framer-motion";
 
 // Pre-defined boards and their solutions
 const BOARDS = {
@@ -164,18 +165,29 @@ export default function Sudoku() {
   );
 
   const renderWin = () => (
-    <Card className="max-w-md w-full aspect-square flex flex-col items-center justify-center bg-card text-card-foreground">
-      <CardHeader>
-        <CardTitle className="text-4xl font-bold text-primary mb-4 text-center">Puzzle Solved!</CardTitle>
-      </CardHeader>
-      <CardContent className="flex flex-col gap-4 w-full px-12">
-        <Button size="lg" onClick={() => setDifficulty(null)}>Play Again</Button>
-      </CardContent>
-    </Card>
+    <motion.div
+      initial={{ opacity: 0, filter: "blur(10px)" }}
+      animate={{ opacity: 1, filter: "blur(0px)" }}
+      className="absolute inset-0 z-50 flex items-center justify-center bg-background/50 backdrop-blur-md"
+    >
+      <Card className="max-w-sm w-full flex flex-col items-center justify-center bg-card text-card-foreground shadow-2xl p-6">
+        <CardHeader>
+          <CardTitle className="text-4xl font-bold text-primary mb-4 text-center">Puzzle Solved!</CardTitle>
+        </CardHeader>
+        <CardContent className="flex flex-col w-full px-6">
+          <Button size="lg" className="w-full" onClick={() => { setDifficulty(null); setIsWon(false); }}>Play Again</Button>
+        </CardContent>
+      </Card>
+    </motion.div>
   );
 
   const renderGame = () => (
-    <div className="flex flex-col items-center w-full max-w-md">
+    <motion.div 
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ type: "spring", stiffness: 400, damping: 30 }}
+      className="flex flex-col items-center w-full max-w-md relative"
+    >
       <div className="w-full flex justify-between items-center mb-4">
         <h2 className="text-xl font-bold capitalize">{difficulty}</h2>
         <Button variant="outline" size="sm" onClick={() => setDifficulty(null)}>Restart</Button>
@@ -197,9 +209,10 @@ export default function Sudoku() {
               const isSameValue = val !== 0 && selectedValue === val;
 
               return (
-                <div
+                <motion.div
                   key={`${r}-${c}`}
                   onClick={() => setSelected({ r, c })}
+                  whileTap={{ scale: 0.9 }}
                   className={cn(
                     "border border-border/50 flex items-center justify-center text-lg sm:text-2xl cursor-pointer select-none transition-colors",
                     c % 3 === 2 && c !== 8 && "border-r-2 border-r-foreground",
@@ -211,12 +224,28 @@ export default function Sudoku() {
                     isError && !isGiven && "text-destructive font-bold"
                   )}
                 >
-                  {val !== 0 ? val : ""}
-                </div>
+                  <AnimatePresence mode="popLayout">
+                    {val !== 0 && (
+                      <motion.span
+                        key={val}
+                        initial={{ scale: 0.5, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        exit={{ scale: 0.5, opacity: 0 }}
+                        transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                      >
+                        {val}
+                      </motion.span>
+                    )}
+                  </AnimatePresence>
+                </motion.div>
               );
             })
           )}
         </div>
+        
+        <AnimatePresence>
+          {isWon && renderWin()}
+        </AnimatePresence>
       </div>
 
       <div className="grid grid-cols-5 gap-2 mt-6 w-full">
@@ -224,7 +253,7 @@ export default function Sudoku() {
           <Button
             key={num}
             variant="secondary"
-            className="text-lg h-12"
+            className="text-lg h-12 active:scale-95 transition-transform"
             onClick={() => handleInput(num)}
             disabled={!selected || initialBoard[selected.r][selected.c] !== 0}
           >
@@ -233,14 +262,14 @@ export default function Sudoku() {
         ))}
         <Button
           variant="destructive"
-          className="text-lg h-12"
+          className="text-lg h-12 active:scale-95 transition-transform"
           onClick={() => handleInput(0)}
           disabled={!selected || initialBoard[selected.r][selected.c] !== 0}
         >
           X
         </Button>
       </div>
-    </div>
+    </motion.div>
   );
 
   return (
@@ -252,8 +281,7 @@ export default function Sudoku() {
       </div>
 
       {!difficulty && renderMenu()}
-      {difficulty && !isWon && renderGame()}
-      {difficulty && isWon && renderWin()}
+      {difficulty && renderGame()}
     </div>
   );
 }
