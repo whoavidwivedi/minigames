@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">games</string>
+    <string name="title_activity_main">games</string>
+    <string name="package_name">com.games.app</string>
+    <string name="custom_url_scheme">com.games.app</string>
+</resources>

@@ -11,6 +11,18 @@ const fontSans = Geist({
 
 const jetbrainsMono = JetBrains_Mono({subsets:['latin'],variable:'--font-mono'})
 
+import type { Metadata, Viewport } from "next"
+
+export const metadata: Metadata = {
+  title: "Mini Games",
+  description: "Offline Mini Games platform",
+  manifest: "/manifest.json",
+}
+
+export const viewport: Viewport = {
+  themeColor: "#000000",
+}
+
 export default function RootLayout({
   children,
 }: Readonly<{
