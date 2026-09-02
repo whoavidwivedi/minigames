@@ -137,11 +137,44 @@ export default function Flappy() {
       ctx.fillRect(pipe.x, pipe.topHeight + PIPE_SPACING, PIPE_WIDTH, CANVAS_HEIGHT);
     }
 
-    // Draw Bird
-    ctx.fillStyle = "#eab308"; // Yellow
+    // Draw Bird Body
+    ctx.fillStyle = "#facc15"; // yellow-400
     ctx.beginPath();
     ctx.arc(50, state.birdY, 15, 0, Math.PI * 2);
     ctx.fill();
+    ctx.strokeStyle = "#000";
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    // Draw Eye
+    ctx.fillStyle = "#fff";
+    ctx.beginPath();
+    ctx.arc(56, state.birdY - 6, 6, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.stroke();
+    
+    // Pupil
+    ctx.fillStyle = "#000";
+    ctx.beginPath();
+    ctx.arc(58, state.birdY - 6, 2, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Draw Beak
+    ctx.fillStyle = "#fb923c"; // orange-400
+    ctx.beginPath();
+    ctx.moveTo(63, state.birdY + 2);
+    ctx.lineTo(76, state.birdY + 5);
+    ctx.lineTo(63, state.birdY + 8);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+
+    // Draw Wing
+    ctx.fillStyle = "#fef08a"; // yellow-200
+    ctx.beginPath();
+    ctx.ellipse(40, state.birdY + 2, 8, 5, -Math.PI / 6, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.stroke();
 
   }, []);
 

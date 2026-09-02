@@ -246,30 +246,35 @@ export default function TwoThousandFortyEight() {
             onTouchStart={handleTouchStart}
             onTouchEnd={handleTouchEnd}
           >
-            <div className="grid grid-cols-4 grid-rows-4 gap-[1px] w-full h-full">
-              {Array.from({ length: 16 }).map((_, index) => {
-                const r = Math.floor(index / 4);
-                const c = index % 4;
-                const tile = tiles.find(t => t.r === r && t.c === c);
-                return (
-                  <div key={index} className="bg-muted rounded-none relative w-full h-full flex items-center justify-center">
-                    <AnimatePresence>
-                      {tile && (
-                        <motion.div
-                          layoutId={tile.id}
-                          initial={tile.isNew ? { scale: 0 } : false}
-                          animate={{ scale: tile.isMerged ? [1, 1.1, 1] : 1 }}
-                          exit={{ scale: 0, opacity: 0 }}
-                          transition={{ type: "spring", stiffness: 250, damping: 25 }}
-                          className={`absolute inset-0 flex items-center justify-center rounded-none font-bold text-xl sm:text-4xl transition-colors duration-200 ${getTileColor(tile.value)} shadow-sm`}
-                        >
-                          {tile.value}
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </div>
-                );
-              })}
+            {/* Background Grid Layer */}
+            <div className="grid grid-cols-4 grid-rows-4 gap-[1px] w-full h-full absolute inset-0 p-[1px]">
+              {Array.from({ length: 16 }).map((_, index) => (
+                <div key={`bg-${index}`} className="bg-muted rounded-none w-full h-full" />
+              ))}
+            </div>
+
+            {/* Tiles Layer */}
+            <div className="grid grid-cols-4 grid-rows-4 gap-[1px] w-full h-full absolute inset-0 p-[1px]">
+              <AnimatePresence>
+                {tiles.map((tile) => (
+                  <motion.div
+                    key={tile.id}
+                    layoutId={tile.id}
+                    layout
+                    initial={tile.isNew ? { scale: 0, opacity: 0 } : false}
+                    animate={{ scale: tile.isMerged ? [1, 1.15, 1] : 1, opacity: 1 }}
+                    exit={{ scale: 0, opacity: 0 }}
+                    transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                    style={{
+                      gridRow: tile.r + 1,
+                      gridColumn: tile.c + 1,
+                    }}
+                    className={`flex items-center justify-center font-bold text-xl sm:text-4xl shadow-sm z-10 ${getTileColor(tile.value)}`}
+                  >
+                    {tile.value}
+                  </motion.div>
+                ))}
+              </AnimatePresence>
             </div>
 
             <AnimatePresence>
